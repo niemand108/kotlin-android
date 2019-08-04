@@ -45,7 +45,4 @@ class DetailsFragment : Fragment() {
         tv.text = Shakespeare.DIALOGUE[mIndex]
         return v
     }
-
-
-
 }

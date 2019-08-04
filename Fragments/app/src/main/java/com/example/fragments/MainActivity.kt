@@ -41,5 +41,4 @@ class MainActivity : FragmentActivity()
     fun isMultipane() : Boolean {
         return baseContext.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
     }
-
 }
