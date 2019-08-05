@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.FragmentTransaction
 
@@ -47,6 +48,7 @@ class MainActivity : AppCompatActivity(), OnDialogDoneListener {
         var ft: FragmentTransaction? = supportFragmentManager.beginTransaction()
         var pdf = PromptDialogFragment.newInstance("Enter Message")
         pdf.show(ft, PROMPT_DIALOG_TAG)
+
     }
 
     private fun testAlertDialog() {
@@ -60,6 +62,13 @@ class MainActivity : AppCompatActivity(), OnDialogDoneListener {
         var s = "$tag responds with: $message"
         if (cancelled)
             s = "$tag was cancelled by the user"
-            Toast.makeText(this, s, Toast.LENGTH_LONG).show()
+        else{
+            var tv:TextView = findViewById(R.id.promptmessage)
+            if (tv.text.toString() == "Enter Text")
+                tv.text = "$message\n"
+            else
+                tv.text = tv.text.toString() + "$message\n"
+        }
+        Toast.makeText(this, s, Toast.LENGTH_LONG).show()
     }
 }
