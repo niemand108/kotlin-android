@@ -12,15 +12,17 @@ import java.util.*
 
 class EarthquakeRecyclerViewAdapter(var mEarthQuakes: List<Earthquake>) :
     RecyclerView.Adapter<EarthquakeRecyclerViewAdapter.ViewHolder>() {
+
     companion object {
         var TIME_FORMAT = SimpleDateFormat("HH:mm", Locale.US)
         var MAGNITUDE_FORMAT = DecimalFormat("0.0")
     }
+    lateinit var mAdapterItemClickListener: IAdapterItemClick
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         var v:View = LayoutInflater.from(parent.context)
             .inflate(R.layout.list_item_earthquake, parent, false)
-        return ViewHolder(v)
+        return ViewHolder(v, null)
     }
 
     override fun getItemCount(): Int {
@@ -32,17 +34,35 @@ class EarthquakeRecyclerViewAdapter(var mEarthQuakes: List<Earthquake>) :
         holder.date.text = TIME_FORMAT.format(earthquake.date)
         holder.details.text = earthquake.details
         holder.magnitude.text = MAGNITUDE_FORMAT.format(earthquake.magnitude)
+
+        holder.mListener = View.OnClickListener {
+            if(mAdapterItemClickListener != null)
+                mAdapterItemClickListener.onItemClicked(earthquake.details)
+        }
     }
 
-    class ViewHolder:RecyclerView.ViewHolder {
+    fun setOnAdapterItemClick(adapterItemClick: IAdapterItemClick){
+        mAdapterItemClickListener = adapterItemClick
+    }
+
+    class ViewHolder:RecyclerView.ViewHolder, View.OnClickListener{
         var date:TextView
         var details:TextView
         var magnitude:TextView
 
-        constructor(v: View) : super(v) {
+        var mListener:View.OnClickListener?
+
+        constructor(v: View, listener: View.OnClickListener?) : super(v) {
             date = v.findViewById<TextView>(R.id.date)
             details = v.findViewById<TextView>(R.id.details)
             magnitude = v.findViewById<TextView>(R.id.magnitude)
+
+            mListener = listener
+            v.setOnClickListener(this)
+        }
+
+        override fun onClick(v: View?) {
+            mListener?.onClick(v)
         }
     }
 }

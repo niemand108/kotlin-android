@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class EarthquakeListFragment : Fragment() {
+class EarthquakeListFragment : Fragment(), IAdapterItemClick{
+
     private var mEarthquakes = ArrayList<Earthquake>()
     private var mEarthquakeAdapter =  EarthquakeRecyclerViewAdapter(mEarthquakes)
     private lateinit var mRecyclerView: RecyclerView
@@ -25,6 +27,11 @@ class EarthquakeListFragment : Fragment() {
         var ctx: Context = view.context
         mRecyclerView.layoutManager = LinearLayoutManager(ctx)
         mRecyclerView.adapter = mEarthquakeAdapter
+        mEarthquakeAdapter.setOnAdapterItemClick(this)
+    }
+
+    override fun onItemClicked(selectedItem: String) {
+        Toast.makeText(context, selectedItem, Toast.LENGTH_SHORT).show()
     }
 
     fun setEarthquakes(earthQuakes: ArrayList<Earthquake>) {
