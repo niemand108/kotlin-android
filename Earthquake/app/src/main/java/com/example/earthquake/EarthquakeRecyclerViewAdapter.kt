@@ -34,7 +34,7 @@ class EarthquakeRecyclerViewAdapter(var mEarthQuakes: List<Earthquake>) :
         holder.magnitude.text = MAGNITUDE_FORMAT.format(earthquake.magnitude)
     }
 
-    inner class ViewHolder:RecyclerView.ViewHolder {
+    class ViewHolder:RecyclerView.ViewHolder {
         var date:TextView
         var details:TextView
         var magnitude:TextView
