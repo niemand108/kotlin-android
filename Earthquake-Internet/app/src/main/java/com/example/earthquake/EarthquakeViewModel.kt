@@ -27,7 +27,6 @@ class EarthquakeViewModel(application: Application) : AndroidViewModel(applicati
     protected var earthquakes =  MutableLiveData<List<Earthquake>>()
 
     fun getEarthquakes() : LiveData<List<Earthquake>> {
-        earthquakes = MutableLiveData<List<Earthquake>>()
         loadEarthquakes()
         return earthquakes
     }
