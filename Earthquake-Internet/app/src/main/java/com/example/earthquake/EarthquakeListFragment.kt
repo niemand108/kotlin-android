@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -15,6 +17,7 @@ class EarthquakeListFragment : Fragment(), IAdapterItemClick{
     private var mEarthquakes = ArrayList<Earthquake>()
     private var mEarthquakeAdapter =  EarthquakeRecyclerViewAdapter(mEarthquakes)
     private lateinit var mRecyclerView: RecyclerView
+    protected lateinit var earthquakeViewModel: EarthquakeViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var v:View = inflater.inflate(R.layout.fragment_earthquake_list, container, false)
@@ -30,6 +33,15 @@ class EarthquakeListFragment : Fragment(), IAdapterItemClick{
         mEarthquakeAdapter.setOnAdapterItemClick(this)
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        earthquakeViewModel = ViewModelProviders.of(activity!!).get(EarthquakeViewModel::class.java)
+        earthquakeViewModel.getEarthquakes().observe(this, Observer {
+            if (it != null)
+                setEarthquakes(it as ArrayList<Earthquake>)
+        })
+    }
+
     override fun onItemClicked(selectedItem: String) {
         Toast.makeText(context, selectedItem, Toast.LENGTH_SHORT).show()
     }
@@ -41,7 +53,6 @@ class EarthquakeListFragment : Fragment(), IAdapterItemClick{
                 mEarthquakeAdapter.notifyItemInserted(mEarthquakes.indexOf(e))
             }
         }
-
     }
 
 }

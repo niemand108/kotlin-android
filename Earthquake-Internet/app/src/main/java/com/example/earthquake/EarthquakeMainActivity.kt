@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.ViewModelProviders
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -13,6 +14,7 @@ class EarthquakeMainActivity : AppCompatActivity() {
     }
 
     private lateinit var mEarthquakeListFragment:EarthquakeListFragment
+    private lateinit var earthquakeViewModel: EarthquakeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,9 +33,7 @@ class EarthquakeMainActivity : AppCompatActivity() {
 
         var now:Date = Calendar.getInstance().time
         var dummyQuakes = ArrayList<Earthquake>(0)
-        dummyQuakes.add(Earthquake("0", now, "San Jose",null, 7.3, null))
-        dummyQuakes.add(Earthquake("1", now, "Sevilla",null, 6.5, null))
-        mEarthquakeListFragment.setEarthquakes(dummyQuakes)
 
+        earthquakeViewModel = ViewModelProviders.of(this).get(EarthquakeViewModel::class.java)
     }
 }
