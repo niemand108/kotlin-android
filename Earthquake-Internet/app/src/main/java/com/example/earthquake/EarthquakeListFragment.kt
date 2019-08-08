@@ -27,8 +27,7 @@ class EarthquakeListFragment : Fragment(), IAdapterItemClick{
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        var ctx: Context = view.context
-        mRecyclerView.layoutManager = LinearLayoutManager(ctx)
+        mRecyclerView.layoutManager = LinearLayoutManager(view.context)
         mRecyclerView.adapter = mEarthquakeAdapter
         mEarthquakeAdapter.setOnAdapterItemClick(this)
     }
@@ -54,5 +53,4 @@ class EarthquakeListFragment : Fragment(), IAdapterItemClick{
             }
         }
     }
-
 }

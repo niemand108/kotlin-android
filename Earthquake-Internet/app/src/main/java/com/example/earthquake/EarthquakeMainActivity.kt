@@ -14,7 +14,6 @@ class EarthquakeMainActivity : AppCompatActivity() {
     }
 
     private lateinit var mEarthquakeListFragment:EarthquakeListFragment
-    private lateinit var earthquakeViewModel: EarthquakeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,10 +29,5 @@ class EarthquakeMainActivity : AppCompatActivity() {
         } else {
             mEarthquakeListFragment = fm.findFragmentByTag(TAG_LIST_FRAGMENT) as EarthquakeListFragment
         }
-
-        var now:Date = Calendar.getInstance().time
-        var dummyQuakes = ArrayList<Earthquake>(0)
-
-        earthquakeViewModel = ViewModelProviders.of(this).get(EarthquakeViewModel::class.java)
     }
 }

@@ -24,15 +24,15 @@ class EarthquakeViewModel(application: Application) : AndroidViewModel(applicati
     companion object {
         private const val TAG = "EarthquakeUpdate"
     }
-    protected var earthquakes =  MutableLiveData<List<Earthquake>>()
+    private var earthquakes =  MutableLiveData<List<Earthquake>>()
 
     fun getEarthquakes() : LiveData<List<Earthquake>> {
         loadEarthquakes()
         return earthquakes
     }
 
-    fun loadEarthquakes() {
-        class asyncEarthQuakes() : AsyncTask<Unit, Unit, List<Earthquake>>() {
+    private fun loadEarthquakes() {
+        class AsyncEarthquakes() : AsyncTask<Unit, Unit, List<Earthquake>>() {
             override fun doInBackground(vararg p0: Unit?): List<Earthquake> {
                 var earthquakes_ = ArrayList<Earthquake>(0)
                 var url = URL(getApplication<Application>().getString(R.string.earthquake_feed))
@@ -102,7 +102,6 @@ class EarthquakeViewModel(application: Application) : AndroidViewModel(applicati
                 earthquakes?.let{ it.value = result }
             }
         }
-        asyncEarthQuakes().execute()
-
+        AsyncEarthquakes().execute()
     }
 }
