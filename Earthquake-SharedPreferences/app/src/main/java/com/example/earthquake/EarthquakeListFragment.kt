@@ -15,7 +15,7 @@ import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class EarthquakeListFragment : Fragment(), IAdapterItemClick{
+class EarthquakeListFragment : Fragment() {
 
     private var mEarthquakes = ArrayList<Earthquake>()
     private var mEarthquakeAdapter =  EarthquakeRecyclerViewAdapter(mEarthquakes)
@@ -33,13 +33,7 @@ class EarthquakeListFragment : Fragment(), IAdapterItemClick{
                     setEarthquakes(earthquakes as ArrayList<Earthquake>)
             }
         }
-
     }
-
-    interface OnListFragmentInteractionListener {
-        fun onListFragmentRefreshRequest()
-    }
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var v:View = inflater.inflate(R.layout.fragment_earthquake_list, container, false)
@@ -52,7 +46,6 @@ class EarthquakeListFragment : Fragment(), IAdapterItemClick{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         mRecyclerView.layoutManager = LinearLayoutManager(view.context)
         mRecyclerView.adapter = mEarthquakeAdapter
-        mEarthquakeAdapter.setOnAdapterItemClick(this)
         mSwipeToRefreshView.setOnRefreshListener { updateEarthquakes() }
     }
 
@@ -65,10 +58,6 @@ class EarthquakeListFragment : Fragment(), IAdapterItemClick{
             if (it != null)
                 setEarthquakes(it as ArrayList<Earthquake>)
         })
-    }
-
-    override fun onItemClicked(selectedItem: String) {
-        Toast.makeText(context, selectedItem, Toast.LENGTH_SHORT).show()
     }
 
     fun setEarthquakes(earthQuakes: ArrayList<Earthquake>) {

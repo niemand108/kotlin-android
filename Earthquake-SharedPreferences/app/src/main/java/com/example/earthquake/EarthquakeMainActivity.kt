@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProviders
 import java.util.*
 import kotlin.collections.ArrayList
 
-class EarthquakeMainActivity : AppCompatActivity(), EarthquakeListFragment.OnListFragmentInteractionListener{
+class EarthquakeMainActivity : AppCompatActivity(), OnListFragmentInteractionListener{
     companion object {
         private var SHOW_PREFERENCES = 1
         private var TAG_LIST_FRAGMENT = "TAG_LIST_FRAGMENT"
