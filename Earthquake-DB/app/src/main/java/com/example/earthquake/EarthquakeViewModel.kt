@@ -24,7 +24,7 @@ class EarthquakeViewModel(application: Application) : AndroidViewModel(applicati
     companion object {
         private const val TAG = "EarthquakeUpdate"
     }
-    private var earthquakes : LiveData<List<Earthquake>> = MutableLiveData<List<Earthquake>>()
+    private var earthquakes:LiveData<List<Earthquake>> = MutableLiveData<List<Earthquake>>()
 
     fun getEarthquakes() : LiveData<List<Earthquake>> {
         earthquakes = EarthquakeDatabaseAccesor
@@ -34,6 +34,21 @@ class EarthquakeViewModel(application: Application) : AndroidViewModel(applicati
         loadEarthquakes()
         return earthquakes
     }
+
+    fun loadDBEarthquakes(){
+        class AsyncEarthquakes : AsyncTask<Unit, Unit, LiveData<List<Earthquake>>>() {
+            override fun doInBackground(vararg p0: Unit?): LiveData<List<Earthquake>> {
+                return EarthquakeDatabaseAccesor
+                    .getInstance(getApplication())
+                    .earthquakeDAO()
+                    .loadAllEarthquakes()
+            }
+            override fun onPostExecute(result: LiveData<List<Earthquake>>) {
+                earthquakes = result
+            }
+        }
+            AsyncEarthquakes().execute()
+        }
 
     fun loadEarthquakes() {
         class AsyncEarthquakes() : AsyncTask<Unit, Unit, List<Earthquake>>() {

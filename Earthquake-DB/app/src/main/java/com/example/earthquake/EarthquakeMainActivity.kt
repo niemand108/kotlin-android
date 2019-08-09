@@ -16,6 +16,7 @@ class EarthquakeMainActivity : AppCompatActivity(), OnListFragmentInteractionLis
         private var SHOW_PREFERENCES = 1
         private var TAG_LIST_FRAGMENT = "TAG_LIST_FRAGMENT"
         private var MENU_PREFERENCES = Menu.FIRST + 1
+        private var MENU_LOAD_DB = Menu.FIRST + 2
     }
 
     private lateinit var mEarthquakeListFragment:EarthquakeListFragment
@@ -49,6 +50,7 @@ class EarthquakeMainActivity : AppCompatActivity(), OnListFragmentInteractionLis
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         super.onCreateOptionsMenu(menu)
         menu?.add(0, MENU_PREFERENCES, Menu.NONE, R.string.menu_settings)
+        menu?.add(1, MENU_LOAD_DB, Menu.NONE, "Load DB")
         return true
     }
 
@@ -59,6 +61,9 @@ class EarthquakeMainActivity : AppCompatActivity(), OnListFragmentInteractionLis
                 var i: Intent = Intent(this, PreferencesActivity::class.java)
                 startActivityForResult(i, SHOW_PREFERENCES)
                 return true
+            }
+            MENU_LOAD_DB -> {
+                earthquakeViewModel.loadDBEarthquakes()
             }
         }
         return false
