@@ -25,15 +25,14 @@ class EarthquakeListFragment : Fragment() {
     private lateinit var mSwipeToRefreshView: SwipeRefreshLayout
     private var mListener:OnListFragmentInteractionListener? = null
 
-    private var mPrefListener = object: SharedPreferences.OnSharedPreferenceChangeListener{
-        override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+    private var mPrefListener =
+        SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
             if(PreferencesActivity.PREF_MIN_MAG.equals(key))  {
                 var earthquakes: List<Earthquake>? = earthquakeViewModel.getEarthquakes().value
                 if(earthquakes != null)
                     setEarthquakes(earthquakes as ArrayList<Earthquake>)
             }
         }
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var v:View = inflater.inflate(R.layout.fragment_earthquake_list, container, false)
