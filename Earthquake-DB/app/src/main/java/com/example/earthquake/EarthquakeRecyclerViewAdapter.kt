@@ -11,10 +11,8 @@ import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class EarthquakeRecyclerViewAdapter(var mEarthQuakes: List<Earthquake>) :
     RecyclerView.Adapter<EarthquakeRecyclerViewAdapter.ViewHolder>() {
-
 
     companion object {
         var TIME_FORMAT = SimpleDateFormat("HH:mm", Locale.US)
@@ -24,7 +22,7 @@ class EarthquakeRecyclerViewAdapter(var mEarthQuakes: List<Earthquake>) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         var v:View = LayoutInflater.from(parent.context)
             .inflate(R.layout.list_item_earthquake, parent, false)
-        return ViewHolder(v, null)
+        return ViewHolder(v)
     }
 
     override fun getItemCount(): Int {
@@ -37,19 +35,15 @@ class EarthquakeRecyclerViewAdapter(var mEarthQuakes: List<Earthquake>) :
         holder.details.text = earthquake.details
     }
 
-
     class ViewHolder:RecyclerView.ViewHolder{
         var date:TextView
         var details:TextView
         var magnitude:TextView
 
-
-        constructor(v: View, listener: View.OnClickListener?) : super(v) {
+        constructor(v: View) : super(v) {
             date = v.findViewById<TextView>(R.id.date)
             details = v.findViewById<TextView>(R.id.details)
             magnitude = v.findViewById<TextView>(R.id.magnitude)
-
         }
-
     }
 }
