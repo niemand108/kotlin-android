@@ -92,6 +92,4 @@ class EarthquakeSearchResultActivity : AppCompatActivity(), LifecycleOwner  {
             selectedSearchSuggestionId.value = id
         } else throw ArrayIndexOutOfBoundsException("mmmm")
     }
-
-
 }
