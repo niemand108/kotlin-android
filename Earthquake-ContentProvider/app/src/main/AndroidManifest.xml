@@ -37,5 +37,10 @@
                     android:resource="@xml/searchable"
             />
         </activity>
+        <service android:name=".EarthquakeUpdateJobService" android:exported="true">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"></action>
+            </intent-filter>
+        </service>
     </application>
 </manifest>
