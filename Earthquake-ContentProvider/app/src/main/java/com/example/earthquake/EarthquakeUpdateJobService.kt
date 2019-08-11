@@ -1,10 +1,18 @@
 package com.example.earthquake
 
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.location.Location
+import android.os.Build
 import android.util.Log
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import com.firebase.jobdispatcher.*
@@ -29,6 +37,8 @@ class EarthquakeUpdateJobService : SimpleJobService() {
         const val TAG = "EarthquakeUpdatedJob"
         const val UPDATE_JOB_TAG = "update_job"
         const val PERIODIC_JOB_TAG = "periodic_job"
+        const val NOTIFICATION_ID = 1
+        const val NOTIFICATION_CHANNEL = "earthquake"
 
         fun scheduleUpdateJob(ctx: Context){
             var jobDispatcher = FirebaseJobDispatcher(GooglePlayDriver(ctx))
@@ -104,6 +114,19 @@ class EarthquakeUpdateJobService : SimpleJobService() {
 
             httpconnection.disconnect()
 
+            if(job.tag == PERIODIC_JOB_TAG) {
+                var largestNewEarthquake = findLargestNewEarthquake(earthquakes_)
+
+                var prefs = PreferenceManager.getDefaultSharedPreferences(this)
+                var minimumMagnitude = Integer.parseInt(prefs.getString(PreferencesActivity.PREF_MIN_MAG, "3").toString())
+
+                largestNewEarthquake?.let {
+                    if (largestNewEarthquake.magnitude >= minimumMagnitude)
+                        broadcastNotification(largestNewEarthquake)
+
+                }
+            }
+
             EarthquakeDatabaseAccesor
                 .getInstance(applicationContext)
                 .earthquakeDAO()
@@ -148,5 +171,66 @@ class EarthquakeUpdateJobService : SimpleJobService() {
                     .build())
             }
         }
+    }
+
+    private fun createNotificationChannel(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            var name:CharSequence = getString(R.string.earthquake_channel_name)
+
+            var channel : NotificationChannel = NotificationChannel(NOTIFICATION_CHANNEL,
+                name,
+                NotificationManager.IMPORTANCE_HIGH)
+            channel.enableVibration(true)
+            channel.enableLights(true)
+
+            var notificationManager : NotificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    private fun broadcastNotification(earthquake: Earthquake){
+        createNotificationChannel()
+
+        var startActivityIntent: Intent = Intent(this, EarthquakeMainActivity::class.java)
+
+        var launchIntent: PendingIntent = PendingIntent.getActivity(
+            this,0, startActivityIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        val earthquakeNotificationBuilder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL)
+
+        earthquakeNotificationBuilder
+            .setSmallIcon(R.drawable.notification_icon)
+            .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
+            .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setContentIntent(launchIntent)
+            .setAutoCancel(true)
+            .setShowWhen(true);
+        earthquakeNotificationBuilder
+            .setWhen(earthquake.date.time)
+            .setContentTitle("M:" + earthquake.magnitude)
+            .setContentText(earthquake.details)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(earthquake.details))
+
+        var notificationManager = NotificationManagerCompat.from(this)
+        notificationManager.notify(NOTIFICATION_ID, earthquakeNotificationBuilder.build())
+    }
+
+    private fun findLargestNewEarthquake(newEarthquakes: List<Earthquake>) : Earthquake? {
+
+        var earthquakes: List<Earthquake> = EarthquakeDatabaseAccesor
+            .getInstance(applicationContext)
+            .earthquakeDAO()
+            .loadAllEarthquakesBlocking()
+
+        var largestNewEarthquake: Earthquake? = null
+
+        for(e in newEarthquakes){
+            if(earthquakes.contains(e))
+                continue
+            if (largestNewEarthquake == null || e.magnitude > largestNewEarthquake.magnitude)
+                largestNewEarthquake = e
+        }
+        return largestNewEarthquake
     }
 }

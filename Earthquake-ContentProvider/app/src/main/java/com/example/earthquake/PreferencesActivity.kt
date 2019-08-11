@@ -15,6 +15,7 @@ class PreferencesActivity : AppCompatActivity()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.preferences)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     class PrefFragment : PreferenceFragmentCompat() {

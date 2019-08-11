@@ -40,8 +40,10 @@ class EarthquakeSearchResultActivity : AppCompatActivity(), LifecycleOwner  {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        lifecycleRegistry = LifecycleRegistry(this)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setContentView(R.layout.activity_earthquake_search_result)
+
+        lifecycleRegistry = LifecycleRegistry(this)
 
         var recyclerViewAdapter: RecyclerView = findViewById(R.id.search_result_list)
         recyclerViewAdapter.layoutManager = LinearLayoutManager(this)

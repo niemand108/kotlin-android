@@ -35,4 +35,7 @@ interface EarthquakeDAO {
     @Query("SELECT * FROM earthquake "
                 + "WHERE id= :id LIMIT 1")
     fun getEarthquake(id: String) : LiveData<Earthquake>
+
+    @Query("SELECT * from earthquake ORDER BY date DESC")
+    fun loadAllEarthquakesBlocking(): List<Earthquake>
 }

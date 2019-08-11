@@ -19,7 +19,8 @@
             <meta-data android:name="android.app.default_searchable"
                         android:value=".EarthquakeSearchResultActivity"></meta-data>
         </activity>
-        <activity android:name=".PreferencesActivity">
+        <activity android:name=".PreferencesActivity"
+                android:parentActivityName=".EarthquakeMainActivity">
             <intent-filter>
                 <action android:name="android.Intent.action.MANAGE_NETWORK_USAGE" />
                 <category android:name="android.Intent.category.DEFAULT" />
@@ -28,6 +29,7 @@
         <provider android:authorities="com.example.provider.earthquake" android:name=".EarthquakeSearchProvider" />
         <activity
                 android:name=".EarthquakeSearchResultActivity"
+                android:parentActivityName=".EarthquakeMainActivity"
                 android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
