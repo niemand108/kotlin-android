@@ -10,9 +10,12 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProviders
+import androidx.viewpager.widget.ViewPager
+import com.google.android.material.tabs.TabLayout
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -29,10 +32,15 @@ class EarthquakeMainActivity : AppCompatActivity(), OnListFragmentInteractionLis
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_earthquake_main)
+
+        var toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
 
         var fm: FragmentManager = supportFragmentManager
 
+        /*
         if (savedInstanceState == null) {
             var ft: FragmentTransaction = fm.beginTransaction()
             mEarthquakeListFragment = EarthquakeListFragment()
@@ -41,6 +49,17 @@ class EarthquakeMainActivity : AppCompatActivity(), OnListFragmentInteractionLis
         } else {
             mEarthquakeListFragment = fm.findFragmentByTag(TAG_LIST_FRAGMENT) as EarthquakeListFragment
         }
+        */
+
+        var viewPager: ViewPager = findViewById(R.id.view_pager)
+        viewPager?.let {
+            var pageAdapter = EarthquakeTabsPageAdapter(supportFragmentManager, this)
+            viewPager.adapter = pageAdapter
+
+            var tabLayout: TabLayout = findViewById(R.id.tab_layout)
+            tabLayout.setupWithViewPager(viewPager)
+        }
+
         earthquakeViewModel = ViewModelProviders.of(this).get(EarthquakeViewModel::class.java)
     }
 
